@@ -1,0 +1,38 @@
+{
+  "name": "nvidia-setup",
+  "version": "0.1.0",
+  "description": "Install and validate NVIDIA drivers, CUDA, Fabric Manager, and Docker GPU access on Ubuntu GPU servers.",
+  "author": {
+    "name": "chetan-metrum-ai",
+    "url": "https://github.com/chetan-metrum-ai"
+  },
+  "homepage": "https://github.com/chetan-metrum-ai/skills-and-plugins/tree/main/plugins/nvidia-setup",
+  "repository": "https://github.com/chetan-metrum-ai/skills-and-plugins",
+  "keywords": [
+    "nvidia",
+    "cuda",
+    "gpu",
+    "linux",
+    "ubuntu",
+    "docker"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "NVIDIA Setup",
+    "shortDescription": "Install and validate the NVIDIA software stack on Linux servers.",
+    "longDescription": "Detect GPU hardware, pick a current driver branch, install drivers and CUDA, configure Docker GPU support, and validate the stack end-to-end.",
+    "developerName": "chetan-metrum-ai",
+    "category": "Infrastructure",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/chetan-metrum-ai/skills-and-plugins/tree/main/plugins/nvidia-setup",
+    "defaultPrompt": [
+      "Detect the GPU and choose a current NVIDIA driver branch.",
+      "Install drivers, CUDA, and Docker GPU support on this Ubuntu server.",
+      "Validate that Docker and the host both see the GPUs."
+    ],
+    "brandColor": "#76B900"
+  }
+}

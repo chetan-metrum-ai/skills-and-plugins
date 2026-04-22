@@ -1,0 +1,9 @@
+{
+  "name": "nvidia-setup",
+  "description": "Install and validate NVIDIA drivers, CUDA, Fabric Manager, and Docker GPU access on Ubuntu GPU servers.",
+  "version": "0.1.0",
+  "author": {
+    "name": "chetan-metrum-ai",
+    "url": "https://github.com/chetan-metrum-ai"
+  }
+}

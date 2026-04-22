@@ -1,0 +1,30 @@
+{
+  "name": "skills-and-plugins",
+  "owner": {
+    "name": "chetan-metrum-ai",
+    "url": "https://github.com/chetan-metrum-ai"
+  },
+  "metadata": {
+    "description": "Public marketplace of reusable skills and plugins for Codex and Claude Code.",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "nvidia-setup",
+      "source": "./plugins/nvidia-setup",
+      "description": "Install and validate NVIDIA drivers, CUDA, Fabric Manager, and Docker GPU access on Ubuntu GPU servers.",
+      "version": "0.1.0",
+      "author": {
+        "name": "chetan-metrum-ai"
+      },
+      "category": "infrastructure",
+      "tags": [
+        "nvidia",
+        "cuda",
+        "gpu",
+        "ubuntu",
+        "docker"
+      ]
+    }
+  ]
+}

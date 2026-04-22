@@ -1,0 +1,20 @@
+{
+  "name": "skills-and-plugins",
+  "interface": {
+    "displayName": "Skills and Plugins"
+  },
+  "plugins": [
+    {
+      "name": "nvidia-setup",
+      "source": {
+        "source": "local",
+        "path": "./plugins/nvidia-setup"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Infrastructure"
+    }
+  ]
+}
