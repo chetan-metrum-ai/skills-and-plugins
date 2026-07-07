@@ -8,7 +8,7 @@ description: Generate, edit, and iterate images with Google's Nano Banana Pro / 
   outputs, or direct access to Gemini image-generation API options.
 metadata:
   oasr:
-    hash: sha256:fa143994b45a7055a17f607047785950671df9e2286562e4057ba4eaacb79715
+    hash: sha256:69874dfaf3a9f1c3334f2fc9c38db7879cc7f69ead80ac427ce28a117a7d1d8e
     source: skills/banano
     synced: 'generated'
 ---
