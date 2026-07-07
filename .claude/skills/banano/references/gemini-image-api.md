@@ -1,6 +1,6 @@
 # Gemini Image API Reference
 
-Current source: <https://ai.google.dev/gemini-api/docs/image-generation> and <https://ai.google.dev/api/interactions-api>, checked while creating this skill.
+Current source: <https://ai.google.dev/gemini-api/docs/image-generation> and <https://ai.google.dev/api/interactions-api>. Re-check before changing model limits or request fields.
 
 ## Preferred API
 
@@ -32,6 +32,8 @@ Core request fields:
 - Nano Banana 2 Lite / Gemini 3.1 Flash Lite Image: `gemini-3.1-flash-lite-image`. Fastest and cheapest Gemini image model; not optimized for multiple references or sequential editing.
 - Nano Banana / Gemini 2.5 Flash Image: `gemini-2.5-flash-image`. Legacy Nano Banana series model.
 
+Banano defaults to `gemini-3-pro-image` intentionally. Use model presets only when a lower-cost or Flash-specific capability is desired.
+
 All generated images include a SynthID watermark.
 
 ## Input Blocks
@@ -58,6 +60,18 @@ Supported image input MIME types in the Interactions API reference include `imag
 
 Gemini 3 image workflows support up to 14 total reference images. Nano Banana Pro supports high-fidelity reference use for up to 6 object images, up to 5 character-consistency images, and up to 3 style-reference images within that total.
 
+Video block:
+
+```json
+{"type": "video", "uri": "https://www.youtube.com/watch?v=...", "mime_type": "video/mp4"}
+```
+
+Video-to-image is documented for `gemini-3.1-flash-image`. Public YouTube URLs can be passed directly. For large local video files, use the Files API and pass the resulting URI via `--video-json`.
+
+Observed live API behavior: YouTube URLs or local videos with audio tracks can fail with `Audio input modality is not enabled for this model`, even when using `gemini-3.1-flash-image`. For local videos, strip audio before upload. For YouTube URLs, use a local silent/no-audio video or Files API video URI if the public URL fails.
+
+When a user specifically asks to make a YouTube URL work despite that failure, an optional workaround is to use `uvx yt-dlp` to download a video-only or no-audio MP4, then pass that local file with `--video --strip-video-audio`. Do not require `yt-dlp` for normal image work.
+
 ## Output Format
 
 Image response format:
@@ -77,6 +91,12 @@ Supported image output fields:
 - `mime_type`: `image/jpeg`.
 - `aspect_ratio`: `1:1`, `2:3`, `3:2`, `3:4`, `4:3`, `4:5`, `5:4`, `9:16`, `16:9`, `21:9`, `1:8`, `8:1`, `1:4`, `4:1`.
 - `image_size`: `512`, `1K`, `2K`, `4K`. Use uppercase `K`; lowercase values can be rejected. Nano Banana Pro supports up to 4K.
+
+Current size limits:
+
+- `gemini-3-pro-image`: `1K`, `2K`, `4K`
+- `gemini-3.1-flash-image`: `512`, `1K`, `2K`, `4K`
+- `gemini-3.1-flash-lite-image`: `1K`
 
 Text+image interleaved output:
 
@@ -99,6 +119,12 @@ Use:
 
 Optional `search_types` values include `web_search`, `image_search`, and `enterprise_web_search`. Use grounding when the prompt depends on current weather, recent events, stock charts, maps, factual visual details, or current reference imagery.
 
+`image_search` grounding is documented for `gemini-3.1-flash-image`. Save and surface `google_search_result.search_suggestions` and citation metadata when present; image-search grounding has display requirements.
+
+## Thinking Artifacts
+
+Gemini 3 image models can return `thought` steps with text and interim image summaries. Save these separately when present, but do not rely on them as final output. `gemini-3.1-flash-image` supports `generation_config.thinking_level` values `minimal` and `high`.
+
 ## Multi-Turn Editing
 
 Use `previous_interaction_id` with a follow-up prompt:
@@ -113,3 +139,7 @@ Use `previous_interaction_id` with a follow-up prompt:
 ```
 
 Keep the returned interaction ID in the final answer when further edits are likely.
+
+## Batch Jobs
+
+Use the Gemini Batch API for large image-generation runs. This skill's CLI is optimized for interactive foreground generation, editing, and iteration.
