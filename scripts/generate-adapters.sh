@@ -8,7 +8,7 @@ if ! command -v "$oasr_bin" >/dev/null 2>&1; then
   if command -v uvx >/dev/null 2>&1; then
     oasr_bin="uvx oasr"
   else
-    echo "oasr is required. Install it with: pip install oasr" >&2
+    echo "oasr is required. Install it with: uv tool install oasr" >&2
     exit 127
   fi
 fi

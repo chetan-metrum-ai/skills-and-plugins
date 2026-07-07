@@ -4,45 +4,13 @@ Public marketplace of reusable AI coding skills and plugins. Canonical skills li
 
 ## Install
 
-### OASR-generated adapters
-
-Install OASR:
-
-```bash
-pip install oasr
-```
-
-Generate adapters for OASR's built-in supported agents:
-
-```bash
-make generate-adapters
-```
-
-Equivalent script:
-
-```bash
-scripts/generate-adapters.sh
-```
-
-This validates every skill under `skills/`, registers them in an isolated temporary OASR registry, and generates:
-
-- Cursor: `.cursor/commands/*.md`
-- Windsurf: `.windsurf/workflows/*.md`
-- Codex: `.codex/skills/*.md`
-- GitHub Copilot: `.github/prompts/*.prompt.md`
-- Claude Code: `.claude/commands/*.md`
-
-Unsupported agents are intentionally not generated in this repo. Add support upstream in OASR instead of maintaining local custom adapters.
-
 ### Codex
-
-Add the marketplace:
 
 ```bash
 codex plugin marketplace add chetan-metrum-ai/skills-and-plugins
 ```
 
-Codex will read the marketplace manifest from this repo and make the packaged plugins available in supported Codex surfaces.
+Codex reads `.agents/plugins/marketplace.json` and makes the packaged plugins available in supported Codex surfaces.
 
 ### Claude Code
 
@@ -52,17 +20,49 @@ From inside Claude Code, add the marketplace:
 /plugin marketplace add chetan-metrum-ai/skills-and-plugins
 ```
 
-Then install the first plugin:
+Then install a plugin:
 
 ```text
 /plugin install nvidia-setup@skills-and-plugins
 ```
 
-You can also validate the repo locally before publishing:
+### Generated Agent Adapters
+
+This repo commits generated OASR adapters so agents can consume the public GitHub repo directly or copy the relevant generated directory into a project:
+
+- Cursor: `.cursor/commands/*.md`
+- Windsurf: `.windsurf/workflows/*.md`
+- Codex skills: `.codex/skills/*.md`
+- GitHub Copilot: `.github/prompts/*.prompt.md`
+- Claude Code commands: `.claude/commands/*.md`
+
+Use the committed generated adapter for your agent. You do not need OASR unless you are editing or regenerating skills in this repository.
+
+## Development
+
+Canonical skills live under `skills/`. OASR is only needed when developing skills or regenerating supported adapter output.
+
+Install OASR with `uv`:
 
 ```bash
-claude plugin validate .
+uv tool install oasr
 ```
+
+Validate and regenerate all supported adapters:
+
+```bash
+make validate-skills
+make generate-adapters
+```
+
+Equivalent scripts:
+
+```bash
+scripts/validate-skills.sh
+scripts/generate-adapters.sh
+```
+
+Unsupported agents are intentionally not generated in this repo. Add support upstream in OASR instead of maintaining local custom adapters.
 
 ## Current plugins
 
