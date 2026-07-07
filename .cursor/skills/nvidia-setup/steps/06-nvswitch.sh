@@ -17,7 +17,11 @@ echo "Driver branch: ${TARGET_DRIVER}"
 echo "NVLSM needed: ${NEEDS_NVLSM}"
 
 echo "Installing NVIDIA Fabric Manager..."
-sudo apt-get install -y "nvidia-fabricmanager-${TARGET_DRIVER}"
+if [ "${TARGET_DRIVER}" -ge 590 ] 2>/dev/null; then
+  sudo apt-get install -y nvidia-fabricmanager
+else
+  sudo apt-get install -y "nvidia-fabricmanager-${TARGET_DRIVER}"
+fi
 
 if [ "${NEEDS_NVLSM}" = "true" ]; then
   echo "Installing NVLink Subnet Manager..."

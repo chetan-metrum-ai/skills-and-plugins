@@ -17,25 +17,34 @@ The bundled scripts in this repository target Ubuntu hosts, not generic Debian-f
 
 ## Current branch snapshot
 
-Checked against NVIDIA documentation on **April 22, 2026**:
+Checked against NVIDIA documentation on **July 7, 2026**:
 
-- Latest published data center branch in the index: `R595`
-- Current published R595 Linux version: `595.58.03`
-- Prior major branch still listed in the index: `R590`
-- Current published R590 Linux version: `590.48.01`
+- NVIDIA Unix driver archive lists Linux x86_64/aarch64 production branch `595.84`.
+- NVIDIA Unix driver archive lists Linux x86_64/aarch64 new-feature branch `610.43.03`.
+- NVIDIA data center driver index currently lists R580 data-center release notes, with older branches still present.
+- CUDA Toolkit release notes for CUDA 13.3 Update 1 list `610.43.02` as the Linux driver version associated with the toolkit.
 
 Implication:
 
-- If the workload targets CUDA 13.2, start by validating `R595`.
-- If the environment is pinned to CUDA 13.1, `R590` may still satisfy compatibility, but verify OS and GPU support before using it.
+- Start production Ubuntu installs at `TARGET_DRIVER=595` unless current docs or the workload require a newer new-feature branch.
+- Use `TARGET_DRIVER=610` only when the host/workload specifically needs the CUDA 13.3 toolkit-corresponding driver or another feature unavailable in production branch 595.
+- Do not infer that every CUDA 13.3 workload requires 610; CUDA 13.x minor-version compatibility allows 580+ drivers, but newer toolkit features can require newer drivers.
 
 ## CUDA compatibility guidance
 
 NVIDIA's forward compatibility guidance currently indicates:
 
-- CUDA 13.0 requires `580+`
-- CUDA 13.1 requires `590+`
-- CUDA 13.2 requires `595+`
+- CUDA 13.x minor-version compatibility requires `580+`
+- CUDA 12.x minor-version compatibility requires `525+` and `<580`
+- CUDA 11.x minor-version compatibility requires `450+` and `<525`
+
+CUDA Toolkit 13.3 release notes list toolkit-corresponding Linux driver versions:
+
+- CUDA 13.3 Update 1: `610.43.02+`
+- CUDA 13.3 GA: `610.43.02+`
+- CUDA 13.2 Update 1: `595.58.03+`
+- CUDA 13.1 Update 1: `590.48.01+`
+- CUDA 13.0 Update 2: `580.95.05+`
 
 Do not select the CUDA package independently from the driver branch.
 
@@ -56,13 +65,29 @@ Practical rule for this skill:
 
 The CUDA installation guide recommends the `cuda-toolkit` meta package for generic installs.
 
-For pinned installs, distro repositories commonly expose versioned packages such as:
+For pinned installs, distro repositories commonly expose versioned toolkit packages such as:
 
+- `cuda-toolkit-13-3`
 - `cuda-toolkit-13-2`
 - `cuda-toolkit-13-1`
 - `cuda-toolkit-13-0`
 
-The bundled install script accepts `TARGET_CUDA_PKG` so you can pin the exact package line you researched.
+The bundled install script accepts `TARGET_CUDA_PKG` so you can pin the exact package line you researched. The default is `13-3`.
+
+## Ubuntu driver package guidance
+
+NVIDIA changed Ubuntu driver package naming for branch 590 and later:
+
+- Install `nvidia-driver-pinning-<branch>` to lock a branch such as `595`.
+- Then install the unversioned package:
+  - `nvidia-open` for Turing and newer GPUs using open kernel modules.
+  - `cuda-drivers` for proprietary modules or legacy GPU families.
+- Do not use old branch-suffixed driver package names such as `nvidia-open-595` for branches `590+`.
+
+For branches older than 590, the historical package names remain relevant:
+
+- `nvidia-open-<branch>`
+- `nvidia-driver-<branch>`
 
 ## NVSwitch and services
 
@@ -74,15 +99,15 @@ Use Fabric Manager only when the platform actually needs it. Common cases:
 
 Match Fabric Manager to the selected driver branch:
 
-- `nvidia-fabricmanager-595` with driver `595`
-- `nvidia-fabricmanager-590` with driver `590`
+- For `590+` Ubuntu packages, use unversioned `nvidia-fabricmanager` with the branch pinning package already installed.
+- For older branches, use branch-suffixed packages such as `nvidia-fabricmanager-580`.
 
 ## Validation image guidance
 
 The skill defaults to a lightweight CUDA image:
 
 ```bash
-CUDA_TEST_IMAGE="nvidia/cuda:13.2.1-base-ubuntu22.04"
+CUDA_TEST_IMAGE="nvidia/cuda:13.3.0-base-ubuntu24.04"
 ```
 
 If you want a framework-level validation, set `PYTORCH_IMAGE` to a current image that matches the host CUDA stack before running the validation step.

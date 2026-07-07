@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-CUDA_TEST_IMAGE="${CUDA_TEST_IMAGE:-nvidia/cuda:13.2.1-base-ubuntu22.04}"
+CUDA_TEST_IMAGE="${CUDA_TEST_IMAGE:-nvidia/cuda:13.3.0-base-ubuntu24.04}"
 PYTORCH_IMAGE="${PYTORCH_IMAGE:-}"
 
 echo "=== Validating NVIDIA Stack ==="

@@ -4,8 +4,8 @@
 set -euo pipefail
 
 TARGET_DRIVER="${TARGET_DRIVER:-595}"
-TARGET_CUDA_PKG="${TARGET_CUDA_PKG:-13-2}"
-USE_OPEN_MODULES="${USE_OPEN_MODULES:-false}"
+TARGET_CUDA_PKG="${TARGET_CUDA_PKG:-13-3}"
+USE_OPEN_MODULES="${USE_OPEN_MODULES:-true}"
 
 echo "=== Installing Driver + CUDA ==="
 echo "Driver branch: ${TARGET_DRIVER}"
@@ -40,10 +40,20 @@ rm -f cuda-keyring_1.1-1_all.deb
 sudo apt-get update
 
 echo "Installing driver..."
-if [ "${USE_OPEN_MODULES}" = "true" ]; then
-  sudo apt-get install -y "nvidia-open-${TARGET_DRIVER}"
+if [ "${TARGET_DRIVER}" -ge 590 ] 2>/dev/null; then
+  echo "Installing Ubuntu 590+ branch pinning package..."
+  sudo apt-get install -y --purge "nvidia-driver-pinning-${TARGET_DRIVER}"
+  if [ "${USE_OPEN_MODULES}" = "true" ]; then
+    sudo apt-get install -y nvidia-open
+  else
+    sudo apt-get install -y cuda-drivers
+  fi
 else
-  sudo apt-get install -y "nvidia-driver-${TARGET_DRIVER}"
+  if [ "${USE_OPEN_MODULES}" = "true" ]; then
+    sudo apt-get install -y "nvidia-open-${TARGET_DRIVER}"
+  else
+    sudo apt-get install -y "nvidia-driver-${TARGET_DRIVER}"
+  fi
 fi
 
 echo "Installing CUDA toolkit..."
