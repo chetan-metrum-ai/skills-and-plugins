@@ -9,7 +9,7 @@ Public marketplace of reusable AI coding skills and plugins. Canonical skills li
 Install OASR:
 
 ```bash
-pip install oasr
+uv tool install oasr
 ```
 
 Generate adapters for OASR's built-in supported agents:
