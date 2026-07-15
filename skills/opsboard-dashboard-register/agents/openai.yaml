@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPSBOARD Dashboard Register"
+  short_description: "Prepare a read-only dashboard registration."
+  default_prompt: "Prepare this Git repository for read-only OPSBOARD dashboard registration."

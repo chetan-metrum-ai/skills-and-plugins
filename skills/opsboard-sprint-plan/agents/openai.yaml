@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPSBOARD Sprint Plan"
+  short_description: "Plan an approval-gated Git-native sprint."
+  default_prompt: "Turn this brief into an OPSBOARD sprint proposal."

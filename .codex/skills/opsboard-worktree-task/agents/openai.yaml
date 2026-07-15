@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPSBOARD Worktree Task"
+  short_description: "Start one approved issue in an isolated worktree."
+  default_prompt: "Prepare an isolated worktree for this approved OPSBOARD issue."

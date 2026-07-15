@@ -88,6 +88,22 @@ Typical prompts:
 
 Real API calls require `GEMINI_API_KEY` in the environment. Dry runs do not require a key.
 
+## OPSBOARD workflows
+
+The `opsboard-*` skills provide a Git-native workflow for product repositories:
+initialize a portable `.opsboard/` and git-bug contract, plan approval-gated
+sprints, assign isolated worktrees, record durable status/demo evidence, and
+register a read-only dashboard source.
+
+They are skills, not a hosted execution service. Git and git-bug remain the
+durable source of truth; credentials and generated status projections are never
+committed.
+
+Canonical OPSBOARD custom-agent templates live under `agents/`. The project-init
+skill installs selected templates into an adopted repository's `.codex/agents/`
+directory. OASR generates skill adapters; the TOML files stay canonical because
+Codex loads custom agents from the target project.
+
 ## Repo layout
 
 ```text
@@ -109,6 +125,14 @@ skills/
     agents/openai.yaml
     references/compatibility.md
     steps/*.sh
+  opsboard-project-init/
+  opsboard-sprint-plan/
+  opsboard-worktree-task/
+  opsboard-status-update/
+  opsboard-demo-capture/
+  opsboard-dashboard-register/
+agents/
+  opsboard-*.toml                 Project-scoped Codex custom-agent templates
 plugins/
   nvidia-setup/
     .codex-plugin/plugin.json
