@@ -1,0 +1,35 @@
+{
+  "name": "opsboard-workflow",
+  "version": "0.1.0",
+  "description": "Plan and supervise Git-native OPSBOARD software delivery.",
+  "author": {
+    "name": "chetan-metrum-ai",
+    "url": "https://github.com/chetan-metrum-ai"
+  },
+  "homepage": "https://github.com/chetan-metrum-ai/skills-and-plugins/tree/main/plugins/opsboard-workflow",
+  "repository": "https://github.com/chetan-metrum-ai/skills-and-plugins",
+  "keywords": [
+    "opsboard",
+    "git-bug",
+    "sprint-planning",
+    "worktrees",
+    "software-delivery"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "OPSBOARD Workflow",
+    "shortDescription": "Plan, execute, review, and evidence Git-native software delivery.",
+    "longDescription": "Initialize the Git and git-bug contract, plan approval-gated sprints, work in isolated worktrees, record factual status, capture review evidence, and register a read-only OPSBOARD dashboard source.",
+    "developerName": "chetan-metrum-ai",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Initialize this repository for the Git-native OPSBOARD workflow.",
+      "Turn this brief into an approval-gated OPSBOARD sprint proposal.",
+      "Prepare an approved OPSBOARD issue in an isolated external worktree."
+    ]
+  }
+}

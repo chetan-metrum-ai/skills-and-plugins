@@ -25,6 +25,23 @@
         "ubuntu",
         "docker"
       ]
+    },
+    {
+      "name": "opsboard-workflow",
+      "source": "./plugins/opsboard-workflow",
+      "description": "Plan, execute, review, and evidence Git-native OPSBOARD software delivery.",
+      "version": "0.1.0",
+      "author": {
+        "name": "chetan-metrum-ai"
+      },
+      "category": "productivity",
+      "tags": [
+        "opsboard",
+        "git-bug",
+        "sprint-planning",
+        "worktrees",
+        "software-delivery"
+      ]
     }
   ]
 }

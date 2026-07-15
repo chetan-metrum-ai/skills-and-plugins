@@ -76,6 +76,20 @@ Typical prompts:
 - "Set up this box for Docker GPU workloads."
 - "Detect the GPU model and pick a current driver branch."
 
+### `opsboard-workflow`
+
+Sets up and operates the Git-native OPSBOARD workflow: a repository-owned
+`.opsboard/` contract, git-bug backlog and gates, isolated worktrees, durable
+review evidence, and read-only dashboard registration. It includes the six
+OPSBOARD skills plus project-scoped planner, implementer, reviewer, and status
+steward templates.
+
+Typical prompts:
+
+- "Initialize this repository for the Git-native OPSBOARD workflow."
+- "Turn this brief into an approval-gated OPSBOARD sprint proposal."
+- "Start this approved OPSBOARD issue in an isolated external worktree."
+
 ### `banano`
 
 Generates and edits images with Google's Nano Banana Pro / Gemini image-generation API.
