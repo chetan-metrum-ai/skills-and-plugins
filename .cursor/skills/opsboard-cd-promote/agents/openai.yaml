@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPSBOARD CD Promote"
+  short_description: "Promote approved Git-native delivery to a gated live demo."
+  default_prompt: "Prepare a gated Flux GitOps promotion for this OPSBOARD live-demo environment."
