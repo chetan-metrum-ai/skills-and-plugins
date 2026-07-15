@@ -18,3 +18,8 @@ Git-bug is the backlog and audit source. Use a sprint issue with
 `opsboard:sprint:<id>`. Gates are separate issues with `opsboard:gate`. Progress
 is an attributable git-bug comment or a commit; never infer it from a local
 process or an uncommitted worktree.
+
+For a repository to be independently projectable, publish its Git-bug objects in
+both `refs/bugs/*` and `refs/identities/*`. A consumer fetches those refs explicitly
+before running `git-bug`; ordinary Git clone refspecs fetch branches only. These
+Git refs remain the sole backlog/audit state.

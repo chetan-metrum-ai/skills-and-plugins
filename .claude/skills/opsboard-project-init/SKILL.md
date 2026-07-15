@@ -5,7 +5,7 @@ description: Initialize or validate a Git-native OPSBOARD project. Use when a re
   conventions, or project-scoped OPSBOARD Codex agents.
 metadata:
   oasr:
-    hash: sha256:32c4d6ac6ae68ca3e377d3fb48033ce00836d50372512725aa08baa0192843b5
+    hash: sha256:7e6f9c9ca3a0b166309b82ce4cd31bb4c01d079486e7cd45e617bebddb2e48fb
     source: skills/opsboard-project-init
     synced: 'generated'
 ---
@@ -18,14 +18,28 @@ its Git/git-bug projection; do not add a database, hosted task state, or secrets
 ## Preflight
 
 1. Confirm the repository root, current branch, remote, and selected issue tracker.
-2. Confirm `git-bug` is available. Do not replace an existing tracker or metadata
-   without an explicit migration request.
+2. Confirm `git-bug` is available and fetch the portable Git-bug refs before its
+   first invocation (Git's default clone refspec does not include them):
+
+   ```bash
+   git -C /path/to/project fetch origin \
+     '+refs/bugs/*:refs/bugs/*' '+refs/identities/*:refs/identities/*'
+   git -C /path/to/project config --add remote.origin.fetch '+refs/bugs/*:refs/bugs/*'
+   git -C /path/to/project config --add remote.origin.fetch '+refs/identities/*:refs/identities/*'
+   skills/opsboard-project-init/scripts/validate-project.sh /path/to/project
+   ```
+
+   The validator is read-only. A referenced issue that cannot be read is a failed
+   bootstrap, not an empty backlog. The repository must publish both ref families
+   readably; never substitute hosted state or a database. Do not replace an
+   existing tracker or metadata without an explicit migration request.
 3. Inspect `AGENTS.md`, existing `.codex/`, and `.opsboard/` before creating files.
 
 ## Initialize the contract
 
 Create `.opsboard/project.yaml` with a stable slug, display name, default Git ref,
-and dashboard/demo metadata. Create `.opsboard/sprints/` and `.opsboard/demos/`.
+and dashboard/demo metadata. Create `.opsboard/sprints/` and `.opsboard/demos/`
+(with a non-secret placeholder until there is demo evidence).
 Use the contract in [references/project-contract.md](references/project-contract.md).
 
 Install the OPSBOARD custom-agent templates with the bundled script. Preserve local
@@ -51,5 +65,6 @@ remote tokens, generated dashboard snapshots, or local worktree paths in Git.
 
 ## Verify
 
-Show the committed contract, label taxonomy, and installed agent templates. State
-the repository revision that a read-only OPSBOARD dashboard may project.
+Show the committed contract, label taxonomy, installed agent templates, and a
+passing validator result. State the repository revision that a read-only OPSBOARD
+dashboard may project.
