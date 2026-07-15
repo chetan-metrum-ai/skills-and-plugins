@@ -16,7 +16,8 @@ sync_skill nvidia-setup nvidia-setup
 
 for skill_name in opsboard-acceptance-verify opsboard-cd-promote \
   opsboard-dashboard-register opsboard-demo-capture opsboard-project-init \
-  opsboard-sprint-plan opsboard-status-update opsboard-worktree-task; do
+  opsboard-orchestrate opsboard-sprint-plan opsboard-status-update \
+  opsboard-worktree-task; do
   sync_skill opsboard-workflow "$skill_name"
 done
 

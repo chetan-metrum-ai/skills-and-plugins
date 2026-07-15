@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPSBOARD Orchestrate"
+  short_description: "Surface human decisions across OPSBOARD worktrees."
+  default_prompt: "Review OPSBOARD worktrees and Git-bug decisions, then report which human approvals are required."
