@@ -21,6 +21,15 @@ API_BASE = "https://generativelanguage.googleapis.com"
 SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPT_DIR.parent
 DEFAULT_BRAND_ASSET = SKILL_DIR / "assets" / "metrum-logo-white.png"
+METRUM_STYLE_PROMPT = (
+    "Apply the Metrum AI brand system: near-black background, white primary text, "
+    "restrained gray secondary text, red-to-blue gradient accents "
+    "(#FF3132 → #FE005F → #EE0089 → #CC28AF → #9948CB → #465CDA), "
+    "Geist display typography, Geist Mono technical labels, thin technical rules, "
+    "subtle grid/topology cues, square or minimally rounded UI elements, "
+    "deliberate empty space. Avoid glossy 3D, cartoon illustration, "
+    "rounded consumer-app cards, and generic template styles."
+)
 MODEL_PRESETS = {
     "pro": "gemini-3-pro-image",
     "flash": "gemini-3.1-flash-image",
@@ -162,8 +171,9 @@ def validate_args(args: argparse.Namespace, image_json_blocks: list[dict]) -> No
             raise SystemExit("Use uppercase image sizes such as 1K, 2K, or 4K")
 
     brand_style_images = resolve_brand_style_images(args)
+    brand_object_images = resolve_brand_object_images(args)
     role_counts = {
-        "object": len(args.object_image),
+        "object": len(args.object_image) + len(brand_object_images),
         "character": len(args.character_image),
         "style": len(args.style_image) + len(brand_style_images),
     }
@@ -222,6 +232,50 @@ def resolve_brand_style_images(args: argparse.Namespace) -> list[str]:
     return [str(brand_path)]
 
 
+def resolve_brand_object_images(args: argparse.Namespace) -> list[str]:
+    """Return object-reference paths implied by --brand.
+
+    - brand=metrum (default): inject the bundled Metrum white logo as a
+      high-fidelity object reference unless the caller already passed
+      --object-image or --no-brand-style.
+    - brand=none: no automatic brand reference.
+    - brand=<path>: inject that path as an object reference.
+    """
+    if getattr(args, "no_brand_style", False):
+        return []
+    brand = (getattr(args, "brand", None) or "metrum").strip()
+    if brand.lower() in {"none", "off", "false", "0"}:
+        return []
+    if brand.lower() == "metrum":
+        # Only auto-inject when the caller did not already supply object refs.
+        if args.object_image:
+            return []
+        if DEFAULT_BRAND_ASSET.exists():
+            return [str(DEFAULT_BRAND_ASSET)]
+        print(
+            f"warning: default brand asset not found at {DEFAULT_BRAND_ASSET}; "
+            "pass --brand /path/to/logo.png or --object-image PATH",
+            file=sys.stderr,
+        )
+        return []
+    brand_path = Path(brand).expanduser()
+    if not brand_path.exists():
+        raise SystemExit(f"Brand asset not found: {brand_path}")
+    return [str(brand_path)]
+
+
+def resolve_brand_style_prompt(args: argparse.Namespace) -> str:
+    """Return the Metrum style prompt to prepend when --brand=metrum."""
+    if getattr(args, "no_brand_style", False):
+        return ""
+    brand = (getattr(args, "brand", None) or "metrum").strip()
+    if brand.lower() in {"none", "off", "false", "0"}:
+        return ""
+    if brand.lower() == "metrum":
+        return METRUM_STYLE_PROMPT
+    return ""
+
+
 def build_request(args: argparse.Namespace) -> dict:
     if args.request_json:
         request = parse_json(args.request_json, "--request-json")
@@ -232,6 +286,9 @@ def build_request(args: argparse.Namespace) -> dict:
             raise SystemExit("Provide --prompt, --prompt-file, or --request-json")
 
         prompt = args.prompt or Path(args.prompt_file).read_text(encoding="utf-8")
+        brand_style_prompt = resolve_brand_style_prompt(args)
+        if brand_style_prompt:
+            prompt = f"{brand_style_prompt}\n\n{prompt}"
         image_json_blocks = [parse_json(item, "--image-json") for item in args.image_json]
         video_json_blocks = [parse_json(item, "--video-json") for item in args.video_json]
         validate_args(args, image_json_blocks)
@@ -245,7 +302,8 @@ def build_request(args: argparse.Namespace) -> dict:
         inputs.extend(video_json_blocks)
         inputs.append({"type": "text", "text": prompt})
         inputs.extend(image_block(path) for path in args.image)
-        inputs.extend(role_image_blocks("object", args.object_image))
+        brand_object_images = resolve_brand_object_images(args)
+        inputs.extend(role_image_blocks("object", brand_object_images + list(args.object_image)))
         inputs.extend(role_image_blocks("character", args.character_image))
         brand_style_images = resolve_brand_style_images(args)
         inputs.extend(role_image_blocks("style", brand_style_images + list(args.style_image)))

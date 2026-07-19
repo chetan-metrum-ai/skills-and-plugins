@@ -1,6 +1,6 @@
 # Gemini Image API Reference
 
-Current source: <https://ai.google.dev/gemini-api/docs/image-generation> and <https://ai.google.dev/api/interactions-api>. Re-check before changing model limits or request fields.
+Current source: <https://ai.google.dev/gemini-api/docs/image-generation> and <https://ai.google.dev/api/interactions-api>. Re-check before changing model limits or request fields. Checked **July 19, 2026**.
 
 ## Preferred API
 
@@ -16,7 +16,7 @@ Use the `GEMINI_API_KEY` environment variable. Do not print it.
 
 Core request fields:
 
-- `model`: use `gemini-3-pro-image` for Nano Banana Pro unless the API requires the current preview ID (`gemini-3-pro-image-preview` in the API reference at creation time).
+- `model`: use `gemini-3-pro-image` for Nano Banana Pro. The preview alias `gemini-3-pro-image-preview` was retired on **June 25, 2026** and no longer works.
 - `input`: string or content blocks. Content blocks include text and image blocks.
 - `response_format`: image output format object or an array such as `[{"type":"text"},{"type":"image"}]`.
 - `generation_config`: model controls such as `temperature`, `top_p`, `seed`, `stop_sequences`, `thinking_level`, `thinking_summaries`, and `max_output_tokens`.
@@ -27,10 +27,10 @@ Core request fields:
 
 ## Models
 
-- Nano Banana Pro / Gemini 3 Pro Image: `gemini-3-pro-image`. Premium model for complex visual tasks, professional asset production, advanced localization, brand consistency, precision creative control, 4K output, Google Search grounding, and complex multi-turn editing.
-- Nano Banana 2 / Gemini 3.1 Flash Image: `gemini-3.1-flash-image`. Faster generalist image model.
-- Nano Banana 2 Lite / Gemini 3.1 Flash Lite Image: `gemini-3.1-flash-lite-image`. Fastest and cheapest Gemini image model; not optimized for multiple references or sequential editing.
-- Nano Banana / Gemini 2.5 Flash Image: `gemini-2.5-flash-image`. Legacy Nano Banana series model.
+- Nano Banana Pro / Gemini 3 Pro Image: `gemini-3-pro-image`. Premium model for complex visual tasks, professional asset production, advanced localization, brand consistency, precision creative control, 4K output, Google Search grounding, and complex multi-turn editing. GA release date: **May 28, 2026**. Knowledge cutoff: **January 2025**. Input token limit: 65,536. Output token limit: 32,768. Pricing: ~$0.134/image (1K/2K), ~$0.24/image (4K); Batch API cuts cost ~50%.
+- Nano Banana 2 / Gemini 3.1 Flash Image: `gemini-3.1-flash-image`. Faster generalist image model. 2K: ~$0.101/image; 4K: ~$0.15/image.
+- Nano Banana 2 Lite / Gemini 3.1 Flash Lite Image: `gemini-3.1-flash-lite-image`. Fastest and cheapest Gemini image model; ~$0.034/image at 1K only. Not optimized for multiple references or sequential editing.
+- Nano Banana / Gemini 2.5 Flash Image: `gemini-2.5-flash-image`. Legacy Nano Banana series model. ~$0.039/image.
 
 Nabapro defaults to `gemini-3-pro-image` intentionally. Use model presets only when a lower-cost or Flash-specific capability is desired.
 
