@@ -7,17 +7,19 @@ description: Use this skill to capture Git-backed test evidence, screenshots, an
 
 ## Workflow
 
-1. Read the sprint acceptance criteria first. Capture only evidence actually produced.
-2. For web products, use the project's browser test tooling to capture deterministic desktop and responsive screenshots.
-3. Store reviewable screenshots and concise test/build results in the repository's declared demo location.
-4. Update `.opsboard/demos/<sprint-id>.md` with commit references and non-secret demo links.
-5. Record evidence in the related git-bug issue and request the required review gate.
+1. Read the sprint acceptance criteria **and** Function Spec verification matrices under `.opsboard/approvals/<sprint-id>/capabilities/`. Capture only evidence actually produced.
+2. Map every screenshot or test result to a capability slug and a verification checkbox — not free-form galleries.
+3. For web products, use the project's browser test tooling to capture deterministic desktop and responsive screenshots.
+4. Store reviewable screenshots and concise test/build results in the repository's declared demo location.
+5. Update `.opsboard/demos/<sprint-id>.md` with commit references, capability IDs covered, and non-secret demo links.
+6. Record evidence in the related git-bug issue and request the required **review** gate. The gate body must cite capability IDs.
 
 ## Honesty rules
 
 - Do **not** claim a screenshot, release, deployment, or approval that did not happen.
 - Never commit generated status snapshots, credentials, test tokens, or private environment configuration.
+- Pre-build mocks/videos in the approval package are foresight, not acceptance proof — replace or supplement with post-build evidence for review.
 
 ## Reference
 
-- [`references/demo-capture.md`](references/demo-capture.md) — Demo file layout, screenshot conventions, and commit conventions
+- [`references/demo-capture.md`](references/demo-capture.md) — Demo file layout, verification mapping, and commit conventions

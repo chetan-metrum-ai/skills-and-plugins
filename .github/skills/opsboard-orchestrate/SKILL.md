@@ -6,7 +6,7 @@ description: Use this skill to coordinate Git-native OPSBOARD worktrees and huma
   work after a git-bug approval.
 metadata:
   oasr:
-    hash: sha256:3fc2d4edc524233cb65b44b3e38f7a9c048cf125d555a0f91fcec739094c50db
+    hash: sha256:cbfd3717dd0ceea44319ef423488a6f633038016f5ee11d537ecd611eeb269c6
     source: skills/opsboard-orchestrate
     synced: 'generated'
 ---
@@ -18,18 +18,16 @@ Git-bug is the durable pause/resume queue. Do **not** keep human requests only i
 ## When a worktree needs a person
 
 1. Create a separate git-bug issue titled `decision: <specific choice>`.
-2. Label it `opsboard:human-decision`, `opsboard:sprint:<id>`, and `opsboard:state:planned`. Include:
-   - Owning task issue
-   - Branch and worktree purpose
-   - Required choice
-   - Safe options
-   - Impact
-   - Exact resume condition
-3. Mark the owning task `opsboard:state:blocked`, add a factual comment linking the decision issue, and push both `refs/bugs/*` and `refs/identities/*` to the project remote. Do **not** continue speculative implementation.
+2. Label it `opsboard:human-decision`, `opsboard:sprint:<id>`, and `opsboard:state:planned`.
+3. **Auto-build a decision package** at `.opsboard/approvals/<sprint-id>/decisions/<decision-id>/` with:
+   - Required choice, safe options, impact, exact resume condition
+   - Option comparison: schematic and/or mock per option (nabapro or HTML)
+   - Links to owning task, branch, worktree purpose, and related Function Spec
+4. Put the package path in the decision issue body. Mark the owning task `opsboard:state:blocked`, add a factual comment linking the decision issue, and push both `refs/bugs/*` and `refs/identities/*`. Do **not** continue speculative implementation.
 
 ## Orchestrator loop
 
-Read `git worktree list --porcelain`, then list open git-bug issues labelled `opsboard:human-decision` and blocked task issues. Report each worktree's branch, task, decision ID, requested choice, and last durable evidence. A missing decision issue for a blocked worktree is itself a status defect.
+Read `git worktree list --porcelain`, then list open git-bug issues labelled `opsboard:human-decision` and blocked task issues. Report each worktree's branch, task, decision ID, package path, requested choice, and last durable evidence. A missing decision issue or missing decision package for a blocked worktree is itself a status defect.
 
 ## Resuming
 
@@ -37,7 +35,7 @@ When a human comments with an approval and closes the decision issue:
 
 - Verify the comment supplies the requested choice and any required deployment authority.
 - Mark the owning task active.
-- Record the resume comment.
+- Record the resume comment (link the chosen option in the decision package).
 - Fetch the approved refs in that worktree.
 - Continue from the recorded revision.
 
@@ -54,4 +52,4 @@ The orchestrator may summarize and resume local work. It may **not**:
 
 ## Reference
 
-- [`references/orchestrate.md`](references/orchestrate.md) — Decision-issue schema, worktree report format, and resume procedure
+- [`references/orchestrate.md`](references/orchestrate.md) — Decision-issue schema, decision-folder template, worktree report format, and resume procedure

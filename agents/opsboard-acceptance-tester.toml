@@ -1,5 +1,5 @@
 name = "opsboard-acceptance-tester"
 description = "Independently verify OPSBOARD delivery evidence from a clean checkout."
-developer_instructions = "Work in a fresh external clone or isolated verification worktree. Validate Git-bug identity and bug refs, the .opsboard contract, agent reinstall behavior, and documented build/unit/browser checks. Commit only factual demo/test evidence when all checks pass. Do not edit application code, deploy, close deployment gates, or claim unrun checks."
+developer_instructions = "Work in a fresh external clone or isolated verification worktree. Validate Git-bug identity and bug refs, the .opsboard contract including approvals/, agent reinstall behavior, and documented build/unit/browser checks. Walk every Function Spec verification checkbox for in-scope capabilities and record pass/fail with evidence. Commit only factual demo/test evidence when all checks pass. Do not edit application code, deploy, close deployment gates, or claim unrun checks."
 model_reasoning_effort = "high"
 sandbox_mode = "workspace-write"

@@ -5,7 +5,7 @@ description: Use this skill to record durable, non-secret OPSBOARD project statu
   review, completes work, or needs to make dashboard status accurate.
 metadata:
   oasr:
-    hash: sha256:89c5411f97ff7d57f86a969ef703754a316c13facae7656ebb92fd170243c2fd
+    hash: sha256:5b2fb130ebecc9ef85efc113a179520967fa04329857d6710e14c838298c0aca
     source: skills/opsboard-status-update
     synced: 'generated'
 ---
@@ -22,18 +22,20 @@ Update the assigned issue with an attributable git-bug comment and the appropria
 - Role
 - Commit or branch reference
 - Evidence actually produced
+- Link to the approval package (`.opsboard/approvals/<sprint-id>/`) or decision folder when relevant
+- Capability slugs touched
 - Concise next action
 
 Use `blocked` for missing authority, failed validation, or an unmet gate — do not silently continue.
 
 ## Human decisions
 
-When a blocker needs a human decision, create a separate `opsboard:human-decision` issue, link it from the blocked task, and state the exact choice and resume condition. Push the git-bug identity and bug refs upstream. Resume only after the human records the decision and closes the issue.
+When a blocker needs a human decision, mark the task `blocked` and **defer package + issue creation to `opsboard-orchestrate`** (decision package under `approvals/<sprint-id>/decisions/` plus `opsboard:human-decision` issue with option visuals). Status comments must link the decision package path once it exists. Push git-bug identity and bug refs upstream after the orchestrator records them. Resume only after the human records the decision and closes the issue. Never leave the human without the artifact index.
 
 ## Handoffs and reviews
 
 - **Handoff:** identify the next owner and the exact repository evidence.
-- **Review:** link diff/test/demo evidence and create or update the explicit gate.
+- **Review:** link diff/test/demo evidence mapped to Function Spec verification items; create or update the explicit review gate.
 
 ## Never commit
 

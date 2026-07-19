@@ -6,7 +6,7 @@ description: Use this skill to prepare a Git-native project for a hosted read-on
   OPSBOARD write access.
 metadata:
   oasr:
-    hash: sha256:3982567be551ffdcad1472bc04c685922d765d4e53e106508fb1e93658e506da
+    hash: sha256:85470ef9342dd2168007fe94dbd6d1e91d0e6c693bf090fad4592dd760d1b6b3
     source: skills/opsboard-dashboard-register
     synced: 'generated'
 ---
@@ -17,13 +17,14 @@ The project repository is authoritative. OPSBOARD only clones the declared ref a
 
 ## Workflow
 
-1. **Validate before registration.** `.opsboard/project.yaml`, sprint files, demo records, and git-bug status must all be valid.
+1. **Validate before registration.** `.opsboard/project.yaml`, sprint files, approval packages (when declared), demo records, and git-bug status must all be valid.
 2. **Record a catalog proposal** containing:
    - Project slug and display name
    - Git URL and ref
    - Workflow-package commit
    - Name of a platform-managed read-only credential reference
-3. **Require owner approval.** Both the registration and the credential scope must be approved by the repository owner.
+   - Note that approval packages and demos are part of the projected contract
+3. **Require owner approval.** Both the registration and the credential scope must be approved by the repository owner via a durable gate or decision record — not chat alone.
 4. **Verify the selected ref** contains a valid contract. Report stale, unavailable, malformed, or unauthorized projection states visibly.
 
 ## Constraints

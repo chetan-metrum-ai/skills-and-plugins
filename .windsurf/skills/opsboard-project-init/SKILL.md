@@ -2,10 +2,11 @@
 name: opsboard-project-init
 description: Use this skill to initialize or validate a Git-native OPSBOARD project.
   Trigger when a repository needs the standard `.opsboard` contract, git-bug sprint
-  taxonomy, external-worktree conventions, or project-scoped OPSBOARD Codex agents.
+  taxonomy, external-worktree conventions, approval-package layout, or project-scoped
+  OPSBOARD Codex agents.
 metadata:
   oasr:
-    hash: sha256:adc164d4e44e74b39450617164f66e205fe6f45965ee83cc442f3415d84c19e3
+    hash: sha256:34029f53e51bdabb14eaaa02dde1dcabc6ca707d43350535d501ca73fce495fc
     source: skills/opsboard-project-init
     synced: 'generated'
 ---
@@ -32,7 +33,8 @@ Git is the source of truth. OPSBOARD only reads a Git/git-bug projection — no 
 
 ## Initialize the contract
 
-- Create `.opsboard/project.yaml` with slug, display name, default Git ref, dashboard/demo metadata. Create `.opsboard/sprints/` and `.opsboard/demos/` (with a non-secret placeholder).
+- Create `.opsboard/project.yaml` with slug, display name, default Git ref, dashboard/demo metadata.
+- Create `.opsboard/sprints/`, `.opsboard/demos/` (with a non-secret placeholder), and `.opsboard/approvals/` (empty scaffold for human-approval packages).
 - Install OPSBOARD custom-agent templates; preserve local agents and record the marketplace commit that supplied them:
 
   ```bash
@@ -40,13 +42,16 @@ Git is the source of truth. OPSBOARD only reads a Git/git-bug projection — no 
   ```
 
   On PowerShell, run `scripts/install-agents.ps1 <project-path>` instead. The script refuses to overwrite a different local agent file — resolve conflicts explicitly.
-- Create or document git-bug labels: `opsboard:sprint`, `opsboard:gate`, `opsboard:sprint:<id>`, `opsboard:role:<planner|implementer|reviewer|status-steward>`, `opsboard:state:<planned|active|blocked|review|done>`.
+- Create or document git-bug labels:
+  - `opsboard:sprint`, `opsboard:gate`, `opsboard:human-decision`, `opsboard:sprint:<id>`
+  - `opsboard:role:<planner|implementer|reviewer|status-steward|orchestrator|acceptance-tester|deployment-engineer|deployment-approver>`
+  - `opsboard:state:<planned|active|blocked|review|done>`
 - Commit the initialized contract as one focused change. Never commit credentials, remote tokens, generated dashboard snapshots, or local worktree paths.
 
 ## Verify
 
-Show the committed contract, label taxonomy, installed agent templates, and a passing validator result. State the repository revision a read-only OPSBOARD dashboard may project.
+Show the committed contract, label taxonomy, installed agent templates, approvals scaffold, and a passing validator result. State the repository revision a read-only OPSBOARD dashboard may project.
 
 ## Reference
 
-- [`references/project-contract.md`](references/project-contract.md) — Full contract schema and examples
+- [`references/project-contract.md`](references/project-contract.md) — Full contract schema, approval-package layout, and gate/label taxonomy

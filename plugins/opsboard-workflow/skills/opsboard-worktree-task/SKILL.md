@@ -8,7 +8,9 @@ description: Use this skill to start one approved OPSBOARD git-bug issue in an i
 ## Pre-work checks
 
 - Confirm issue ID, owner role, sprint label, acceptance criteria, and all blocking gates.
-- **Stop and report** a missing or open required gate — do not start work.
+- Confirm **plan-lock is closed** and the sprint approval package exists at `.opsboard/approvals/<sprint-id>/`.
+- Confirm Function Specs exist for every capability this task owns (links from the task or sprint file).
+- **Stop and report** a missing/open required gate or missing Function Spec — do not start work.
 
 ## Setup
 
@@ -17,9 +19,10 @@ description: Use this skill to start one approved OPSBOARD git-bug issue in an i
 
 ## During work
 
-- Record an attributable git-bug start comment with branch and intended evidence.
+- Record an attributable git-bug start comment with branch, owned capability slugs, and intended evidence (mapped to Function Spec verification).
 - Keep commits focused.
 - Before handoff, run the relevant formatter, typecheck, tests, and build. Record what actually ran and any blockers.
+- If a product choice appears, use `opsboard-orchestrate` (decision package + human-decision issue) — do not invent policy in chat.
 
 ## Prohibited without approval
 
@@ -27,4 +30,4 @@ Do not rebase, merge, push, tag, release, deploy, or discard unrelated work with
 
 ## Reference
 
-- [`references/worktree-task.md`](references/worktree-task.md) — Branch naming, worktree layout, and handoff format
+- [`references/worktree-task.md`](references/worktree-task.md) — Branch naming, worktree layout, capability linkage, and handoff format

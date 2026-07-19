@@ -1,4 +1,4 @@
 interface:
   display_name: "OPSBOARD Orchestrate"
-  short_description: "Surface human decisions across OPSBOARD worktrees."
-  default_prompt: "Review OPSBOARD worktrees and Git-bug decisions, then report which human approvals are required."
+  short_description: "Coordinate worktrees and visual human-decision packages."
+  default_prompt: "Review OPSBOARD worktrees and blocked tasks; for each needed human choice, auto-build an approvals/.../decisions/ package with option visuals, create the opsboard:human-decision issue, and report what to approve or steer."

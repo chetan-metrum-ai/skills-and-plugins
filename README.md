@@ -97,10 +97,11 @@ Git-native OPSBOARD workflow skills (also packaged as the `opsboard-workflow` pl
 ### `opsboard-workflow`
 
 Sets up and operates the Git-native OPSBOARD workflow: a repository-owned
-`.opsboard/` contract, git-bug backlog and gates, isolated worktrees, durable
-review evidence, and read-only dashboard registration. It includes the six
-OPSBOARD skills plus project-scoped planner, implementer, reviewer, and status
-steward templates.
+`.opsboard/` contract, git-bug backlog and gates, human-approval packages,
+isolated worktrees, durable review evidence, and read-only dashboard
+registration. It includes the nine OPSBOARD skills plus project-scoped agent
+templates (planner, implementer, reviewer, status-steward, orchestrator,
+acceptance-tester, deployment-engineer, deployment-approver).
 
 Typical prompts:
 
@@ -111,18 +112,23 @@ Typical prompts:
 ## OPSBOARD workflows
 
 The `opsboard-*` skills provide a Git-native workflow for product repositories:
-initialize a portable `.opsboard/` and git-bug contract, plan approval-gated
-sprints, assign isolated worktrees, record durable status/demo evidence, and
-register a read-only dashboard source.
+initialize a portable `.opsboard/` and git-bug contract, auto-build human-approval
+packages (Function Specs, user/admin flow schematics, mock screens, and mock
+interaction videos for UI work), plan approval-gated sprints, assign isolated
+worktrees, record durable status/demo evidence mapped to verification matrices,
+and register a read-only dashboard source.
+
+Humans approve or steer; agents assemble the decision artifacts. Durable approval
+is a human comment plus a closed git-bug gate or decision issue — never chat alone.
 
 They are skills, not a hosted execution service. Git and git-bug remain the
 durable source of truth; credentials and generated status projections are never
 committed.
 
 Canonical OPSBOARD custom-agent templates live under `agents/`. The project-init
-skill installs selected templates into an adopted repository's `.codex/agents/`
-directory. OASR generates skill adapters; the TOML files stay canonical because
-Codex loads custom agents from the target project.
+skill installs all `agents/opsboard-*.toml` templates into an adopted
+repository's `.codex/agents/` directory. OASR generates skill adapters; the TOML
+files stay canonical because Codex loads custom agents from the target project.
 
 ## Repo layout
 
@@ -151,6 +157,9 @@ skills/
   opsboard-status-update/
   opsboard-demo-capture/
   opsboard-dashboard-register/
+  opsboard-orchestrate/
+  opsboard-acceptance-verify/
+  opsboard-cd-promote/
 agents/
   opsboard-*.toml                 Project-scoped Codex custom-agent templates
 plugins/
