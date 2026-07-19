@@ -18,6 +18,9 @@ from pathlib import Path
 
 DEFAULT_MODEL = "gemini-3-pro-image"
 API_BASE = "https://generativelanguage.googleapis.com"
+SCRIPT_DIR = Path(__file__).resolve().parent
+SKILL_DIR = SCRIPT_DIR.parent
+DEFAULT_BRAND_ASSET = SKILL_DIR / "assets" / "metrum-logo-white.png"
 MODEL_PRESETS = {
     "pro": "gemini-3-pro-image",
     "flash": "gemini-3.1-flash-image",
@@ -158,10 +161,11 @@ def validate_args(args: argparse.Namespace, image_json_blocks: list[dict]) -> No
         if args.image_size.endswith("k"):
             raise SystemExit("Use uppercase image sizes such as 1K, 2K, or 4K")
 
+    brand_style_images = resolve_brand_style_images(args)
     role_counts = {
         "object": len(args.object_image),
         "character": len(args.character_image),
-        "style": len(args.style_image),
+        "style": len(args.style_image) + len(brand_style_images),
     }
     total_references = (
         len(args.image)
@@ -185,6 +189,37 @@ def validate_args(args: argparse.Namespace, image_json_blocks: list[dict]) -> No
     if args.thinking_level and model == "gemini-3.1-flash-image":
         if args.thinking_level not in {"minimal", "high"}:
             raise SystemExit("gemini-3.1-flash-image supports thinking_level minimal or high")
+
+
+def resolve_brand_style_images(args: argparse.Namespace) -> list[str]:
+    """Return style-reference paths implied by --brand.
+
+    - brand=metrum (default): inject the bundled Metrum white logo unless the
+      caller already passed --style-image or --no-brand-style.
+    - brand=none: no automatic brand reference.
+    - brand=<path>: inject that path as a style reference.
+    """
+    if getattr(args, "no_brand_style", False):
+        return []
+    brand = (getattr(args, "brand", None) or "metrum").strip()
+    if brand.lower() in {"none", "off", "false", "0"}:
+        return []
+    if brand.lower() == "metrum":
+        # Only auto-inject when the caller did not already supply style refs.
+        if args.style_image:
+            return []
+        if DEFAULT_BRAND_ASSET.exists():
+            return [str(DEFAULT_BRAND_ASSET)]
+        print(
+            f"warning: default brand asset not found at {DEFAULT_BRAND_ASSET}; "
+            "pass --brand /path/to/logo.png or --style-image PATH",
+            file=sys.stderr,
+        )
+        return []
+    brand_path = Path(brand).expanduser()
+    if not brand_path.exists():
+        raise SystemExit(f"Brand asset not found: {brand_path}")
+    return [str(brand_path)]
 
 
 def build_request(args: argparse.Namespace) -> dict:
@@ -212,7 +247,8 @@ def build_request(args: argparse.Namespace) -> dict:
         inputs.extend(image_block(path) for path in args.image)
         inputs.extend(role_image_blocks("object", args.object_image))
         inputs.extend(role_image_blocks("character", args.character_image))
-        inputs.extend(role_image_blocks("style", args.style_image))
+        brand_style_images = resolve_brand_style_images(args)
+        inputs.extend(role_image_blocks("style", brand_style_images + list(args.style_image)))
         inputs.extend(image_json_blocks)
 
         request = {
@@ -403,6 +439,8 @@ def main() -> int:
     parser.add_argument("--character-image", action="append", default=[], help="Character consistency reference image. Repeatable.")
     parser.add_argument("--style-image", action="append", default=[], help="Style reference image. Repeatable.")
     parser.add_argument("--image-json", action="append", default=[], help="Exact JSON image content block. Repeatable.")
+    parser.add_argument("--brand", default="metrum", help="Brand preset. 'metrum' injects the bundled Metrum logo as a style reference. 'none' disables. Pass a path to use a custom logo. Default: metrum.")
+    parser.add_argument("--no-brand-style", action="store_true", help="Skip injecting the default brand style reference even when --brand is set.")
     parser.add_argument("--video", action="append", default=[], help="Local video reference. Repeatable; use Files API for large videos.")
     parser.add_argument("--strip-video-audio", action="store_true", help="Use ffmpeg to remove audio from local --video inputs before upload.")
     parser.add_argument("--video-uri", action="append", default=[], help="Public video URI such as a YouTube URL. Repeatable.")
