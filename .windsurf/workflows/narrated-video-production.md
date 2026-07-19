@@ -1,5 +1,5 @@
 ---
-description: "Produce demo, explainer, and informational videos from instructions and supplied background material, with a human-approved speech narrative and audio-timed visuals. Use when Codex must plan or create a narrated product demo, tutorial, launch video, training video, or informational video that combines voice-over with slides, text, images, screen recordings, or video clips."
+description: "Use this skill when the user needs a narrated product demo, tutorial, launch video, training video, or informational video that combines voice-over with slides, text, images, screen recordings, or clips. Trigger on any request to plan or produce a video with a speech narrative."
 auto_execution_mode: 1
 ---
 

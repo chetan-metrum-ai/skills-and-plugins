@@ -1,5 +1,5 @@
 ---
-description: "Prepare a Git-native project for a hosted read-only OPSBOARD dashboard. Use when declaring a repository, Git ref, dashboard metadata, demo references, or a revocable read-only remote credential reference without granting OPSBOARD write access."
+description: "Use this skill to prepare a Git-native project for a hosted read-only OPSBOARD dashboard. Trigger when declaring a repository, Git ref, dashboard metadata, demo references, or a revocable read-only remote credential reference without granting OPSBOARD write access."
 auto_execution_mode: 1
 ---
 

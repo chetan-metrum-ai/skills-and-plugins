@@ -1,6 +1,6 @@
 # opsboard-dashboard-register
 
-Prepare a Git-native project for a hosted read-only OPSBOARD dashboard. Use when declaring a repository, Git ref, dashboard metadata, demo references, or a revocable read-only remote credential reference without granting OPSBOARD write access.
+Use this skill to prepare a Git-native project for a hosted read-only OPSBOARD dashboard. Trigger when declaring a repository, Git ref, dashboard metadata, demo references, or a revocable read-only remote credential reference without granting OPSBOARD write access.
 
 This skill delegates to the agent skill at `../skills/opsboard-dashboard-register/`.
 

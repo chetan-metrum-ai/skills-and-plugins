@@ -10,23 +10,6 @@
   },
   "plugins": [
     {
-      "name": "nvidia-setup",
-      "source": "./plugins/nvidia-setup",
-      "description": "Install and validate NVIDIA drivers, CUDA, Fabric Manager, and Docker GPU access on Ubuntu GPU servers.",
-      "version": "0.1.0",
-      "author": {
-        "name": "chetan-metrum-ai"
-      },
-      "category": "infrastructure",
-      "tags": [
-        "nvidia",
-        "cuda",
-        "gpu",
-        "ubuntu",
-        "docker"
-      ]
-    },
-    {
       "name": "opsboard-workflow",
       "source": "./plugins/opsboard-workflow",
       "description": "Plan, execute, review, and evidence Git-native OPSBOARD software delivery.",

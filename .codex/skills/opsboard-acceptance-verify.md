@@ -1,6 +1,6 @@
 # opsboard-acceptance-verify
 
-Independently verify an OPSBOARD sprint from a clean Git checkout and capture factual Git-backed acceptance evidence. Use when a sprint needs clean-clone/bootstrap validation, build/unit/Playwright verification, committed screenshots, or an independent release-evidence review.
+Use this skill to independently verify an OPSBOARD sprint from a clean Git checkout and capture factual Git-backed acceptance evidence. Trigger when a sprint needs clean-clone/bootstrap validation, build/unit/Playwright verification, committed screenshots, or an independent release-evidence review.
 
 This skill delegates to the agent skill at `../skills/opsboard-acceptance-verify/`.
 

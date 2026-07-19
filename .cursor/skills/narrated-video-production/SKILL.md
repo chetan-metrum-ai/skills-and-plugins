@@ -1,135 +1,75 @@
 ---
 name: narrated-video-production
-description: Produce demo, explainer, and informational videos from instructions and
-  supplied background material, with a human-approved speech narrative and audio-timed
-  visuals. Use when Codex must plan or create a narrated product demo, tutorial, launch
-  video, training video, or informational video that combines voice-over with slides,
-  text, images, screen recordings, or video clips.
+description: Use this skill when the user needs a narrated product demo, tutorial,
+  launch video, training video, or informational video that combines voice-over with
+  slides, text, images, screen recordings, or clips. Trigger on any request to plan
+  or produce a video with a speech narrative.
 metadata:
   oasr:
-    hash: sha256:627becfa14dba10772c77eb35eeb271796412aa8f0480cf565c3debbb017d4a6
+    hash: sha256:3e8389f02358abc1bf42e1c53c5d14ecf365c98d6ab108bb1c2689dee7ec4750
     source: skills/narrated-video-production
     synced: 'generated'
 ---
 
 # Produce an approval-gated narrated video
 
-Make the approved narration and its rendered speech audio the source of truth for
-the video. Do not start speech synthesis or final video assembly until the human
-has explicitly approved the complete narration.
+The approved narration and its rendered speech audio are the source of truth. Do **not** start speech synthesis or final video assembly until the human has explicitly approved the complete narration.
 
-## Apply the Metrum AI visual system
+## Brand
 
-Use the Metrum AI visual system for every video by default and do not substitute
-another brand, palette, font system, or logo. Read
-[`references/metrum-ai-brand.md`](references/metrum-ai-brand.md) before creating
-visuals. Refresh the official sources named there when practical; use the recorded
-specification as the fallback if they are unavailable.
+Apply the Metrum AI visual system by default. Read [`references/metrum-ai-brand.md`](references/metrum-ai-brand.md) before creating visuals. Use the official logo only (never recreate as text); apply the dark technical-interface composition, approved type roles, and red-to-blue gradient.
 
-Use the official Metrum AI logo only, preserve its proportions and clear space,
-and never recreate it as text. Apply the dark technical-interface composition,
-approved type roles, neutral text hierarchy, and red-to-blue gradient specified
-in the reference. Attribute external visual sources separately; do not confuse
-them with Metrum branding.
+## Workflow
 
-## 1. Prepare the approval package
+### 1. Prepare the approval package
 
-Read the instructions and supplied background material. Identify the audience,
-objective, platform, aspect ratio, target duration, brand constraints, available
-assets, and claims that require source support. Ask only for missing information
-that materially affects the video.
+Read the instructions and background material. Identify audience, objective, platform, aspect ratio, target duration, brand constraints, available assets, and claims that need source support. Ask only for missing information that materially affects the video.
 
 Draft a package containing:
 
-- The complete, speakable narration, divided into numbered scenes or beats.
-- A concise visual intent for each beat: screen recording, supplied clip, image,
-  diagram, slide, text overlay, or generated visual.
-- Any on-screen wording and a source note for factual claims.
-- Metrum-branded visual direction and an expected duration that includes pauses.
-- The inter-scene pause configuration: default `0.75` seconds after every
-  non-final scene; allow `0.0` to `2.0` seconds when the user requests a
-  different cadence.
-- Estimated duration and open questions or asset gaps.
+- Complete, speakable narration divided into numbered scenes/beats
+- Visual intent per beat (screen recording, clip, image, diagram, slide, text, generated visual)
+- On-screen wording and source notes for factual claims
+- Metrum-branded visual direction and expected duration including pauses
+- Inter-scene pause config (default `0.75s` after every non-final scene; allow `0.0`–`2.0s`)
+- Estimated duration and open questions/asset gaps
 
-Present the package for review and ask for explicit approval of the narration.
-Treat comments or a general go-ahead as approval only when they clearly approve
-the full narration. Do not silently edit an approved narration. If any word of it
-changes, present the revised complete narration and obtain approval again.
+Present the package and ask for **explicit approval of the full narration**. Comments or a general go-ahead count only when they clearly approve the complete narration. If any word changes after approval, re-present the full narration and obtain approval again.
 
-## 2. Lock the approved narration and generate speech
+### 2. Lock narration and generate speech
 
-Save the approved narration as a durable project artifact and assign stable scene
-IDs. Record the approved text verbatim in the production manifest.
+Save the approved narration as a durable project artifact with stable scene IDs. Record the approved text **verbatim** in the production manifest.
 
-After approval, ask which TTS provider to use. For ElevenLabs, ask for the API
-key and chosen voice ID; ask for the equivalent credentials and voice/model
-selection for another provider. Request credentials only for the active run; use
-environment variables or the provider's secure mechanism, never put secrets in
-source files, manifests, logs, or commits.
+After approval, ask which TTS provider to use and request credentials only for the active run (env vars or provider secure mechanism — never put secrets in source, manifests, logs, or commits).
 
-Generate separate audio clips for the stable scene IDs, then concatenate them
-without rewriting their speech. Insert the configured silence between non-final
-clips; do not append silence to the final clip. Record each measured speech
-duration, every pause duration, the combined duration, provider, model, voice ID,
-and non-secret synthesis settings. Normalize format and loudness only when it
-does not change speech timing. If synthesis, pronunciation, or voice selection
-needs a text change, return to approval rather than patching the wording in
-post-production.
+Generate separate audio clips per scene ID, then concatenate them without rewriting speech. Insert the configured silence between non-final clips; do not append silence to the final clip. Record measured speech durations, pause durations, combined duration, provider, model, voice ID, and non-secret synthesis settings.
 
-Use the rendered audio durations, not estimates or word-count timing, to create
-the timeline. Where available, generate word- or phrase-level timestamps from the
-provider or a forced-alignment/transcription pass; otherwise use measured scene
-durations and mark the lower timestamp precision.
+Use rendered audio durations (not estimates) to create the timeline. Prefer word-/phrase-level timestamps when available; otherwise mark lower timestamp precision.
 
-## 3. Build visuals against the audio timeline
+If synthesis needs a text change, return to approval — do not patch wording in post.
 
-Create a timeline artifact with exact start time, end time, duration, narration
-text, visual asset, on-screen text, pause, and transition for every scene. Make
-visual segments fit their audio segment by extending, trimming, freezing, or
-using a deliberate transition. Never speed up, cut, or pad approved speech merely
-to fit an asset.
+### 3. Build visuals against the audio timeline
 
-Use the configured pause to make scene changes feel intentional. By default,
-hold the outgoing visual for `0.30` seconds, then crossfade to the next visual
-over the remaining `0.45` seconds; start the next narration only after its slide
-is fully visible. Scale the hold and crossfade proportionally if the user changes
-the pause. When the pause is `0`, use a short transition only if it does not
-overlap speech; otherwise use a clean cut. Do not place a transition over spoken
-words by default.
+Create a timeline artifact with exact start/end/duration, narration text, visual asset, on-screen text, pause, and transition for every scene. Fit visuals to audio (extend, trim, freeze, transition) — never speed up, cut, or pad approved speech to fit an asset.
 
-Use supplied or licensed assets. Label generated visuals as such when the user
-needs provenance. Keep on-screen text consistent with the approved narration and
-the source material; do not introduce unsupported claims. Generate captions from
-the final rendered audio and preserve the approved wording except for essential
-caption readability conventions.
+Default pause split: hold outgoing visual `0.30s`, crossfade remaining `0.45s`; start next narration only after its slide is fully visible. Scale proportionally if the user changes the pause. Never place a transition over spoken words by default.
 
-For demo videos, capture the relevant UI state before recording and align each
-action with the spoken claim. Prefer readable pacing over dense screen activity.
-For information videos, favor one primary idea per scene and allow the audience
-enough time to read key text.
+Use supplied or licensed assets; label generated visuals when provenance matters. Keep on-screen text consistent with the approved narration. Generate captions from the final rendered audio.
 
-## 4. Assemble and verify
+### 4. Assemble and verify
 
-Render the video with the final narration as its primary audio track. Align all
-clips, images, slides, transitions, captions, and overlays to the measured
-timeline. Render default transitions inside the explicit inter-scene silence.
-Include music or effects only if requested; duck them beneath speech and ensure
-they do not obscure narration.
+Render with the final narration as the primary audio track. Align all clips, images, slides, transitions, captions, and overlays to the measured timeline. Include music/effects only if requested; duck them beneath speech.
 
 Before delivery, verify:
 
-- Every spoken claim appears in the approved narration and is supported by the
-  supplied material where factual.
-- The final audio starts at zero, has no accidental gaps or overlaps, and matches
-  the manifest duration; every intentional gap is recorded as a configured pause.
-- Visual scene boundaries, captions, and on-screen text match the final audio
-  timestamps; inspect scene transitions frame-by-frame where timing is critical.
-- Metrum AI logo, colors, fonts, contrast, and gradient treatment match the
-  required brand reference.
-- The render has the requested dimensions, frame rate, codec/container, and
-  playable audio.
+- [ ] Every spoken claim is in the approved narration and source-supported where factual
+- [ ] Final audio starts at zero, has no accidental gaps/overlaps, and matches the manifest duration
+- [ ] Visual boundaries, captions, and on-screen text match final audio timestamps
+- [ ] Metrum AI logo, colors, fonts, contrast, and gradient match the brand reference
+- [ ] Render has the requested dimensions, frame rate, codec/container, and playable audio
 
-Deliver the final video, the approved narration, final audio, captions, and the
-non-secret timeline/manifest. State any approximation, missing asset, or timing
-limitation plainly; do not claim frame-exact alignment when only scene-level
-timing was available.
+Deliver the final video, approved narration, final audio, captions, and non-secret timeline/manifest. State any approximation or timing limitation plainly.
+
+## Reference
+
+- [`references/metrum-ai-brand.md`](references/metrum-ai-brand.md) — Brand system, palette, type, logo rules

@@ -1,25 +1,23 @@
 ---
 name: opsboard-project-init
-description: Initialize or validate a Git-native OPSBOARD project. Use when a repository
-  needs the standard .opsboard contract, git-bug sprint taxonomy, external-worktree
-  conventions, or project-scoped OPSBOARD Codex agents.
+description: Use this skill to initialize or validate a Git-native OPSBOARD project.
+  Trigger when a repository needs the standard `.opsboard` contract, git-bug sprint
+  taxonomy, external-worktree conventions, or project-scoped OPSBOARD Codex agents.
 metadata:
   oasr:
-    hash: sha256:7e6f9c9ca3a0b166309b82ce4cd31bb4c01d079486e7cd45e617bebddb2e48fb
+    hash: sha256:adc164d4e44e74b39450617164f66e205fe6f45965ee83cc442f3415d84c19e3
     source: skills/opsboard-project-init
     synced: 'generated'
 ---
 
 # Initialize an OPSBOARD project
 
-Keep the product repository as the durable source of truth. OPSBOARD only reads
-its Git/git-bug projection; do not add a database, hosted task state, or secrets.
+Git is the source of truth. OPSBOARD only reads a Git/git-bug projection — no database, no hosted state, no secrets.
 
 ## Preflight
 
-1. Confirm the repository root, current branch, remote, and selected issue tracker.
-2. Confirm `git-bug` is available and fetch the portable Git-bug refs before its
-   first invocation (Git's default clone refspec does not include them):
+1. Confirm repo root, current branch, remote, and selected tracker.
+2. Make git-bug refs fetchable (Git's default clone refspec omits them), then validate:
 
    ```bash
    git -C /path/to/project fetch origin \
@@ -29,42 +27,26 @@ its Git/git-bug projection; do not add a database, hosted task state, or secrets
    skills/opsboard-project-init/scripts/validate-project.sh /path/to/project
    ```
 
-   The validator is read-only. A referenced issue that cannot be read is a failed
-   bootstrap, not an empty backlog. The repository must publish both ref families
-   readably; never substitute hosted state or a database. Do not replace an
-   existing tracker or metadata without an explicit migration request.
+   The validator is read-only. A referenced issue that cannot be read is a **failed** bootstrap, not an empty backlog. Do not replace an existing tracker or metadata without an explicit migration request.
 3. Inspect `AGENTS.md`, existing `.codex/`, and `.opsboard/` before creating files.
 
 ## Initialize the contract
 
-Create `.opsboard/project.yaml` with a stable slug, display name, default Git ref,
-and dashboard/demo metadata. Create `.opsboard/sprints/` and `.opsboard/demos/`
-(with a non-secret placeholder until there is demo evidence).
-Use the contract in [references/project-contract.md](references/project-contract.md).
+- Create `.opsboard/project.yaml` with slug, display name, default Git ref, dashboard/demo metadata. Create `.opsboard/sprints/` and `.opsboard/demos/` (with a non-secret placeholder).
+- Install OPSBOARD custom-agent templates; preserve local agents and record the marketplace commit that supplied them:
 
-Install the OPSBOARD custom-agent templates with the bundled script. Preserve local
-agent files and record the marketplace commit that supplied the templates:
+  ```bash
+  skills/opsboard-project-init/scripts/install-agents.sh /path/to/project
+  ```
 
-```bash
-skills/opsboard-project-init/scripts/install-agents.sh /path/to/project
-```
-
-On PowerShell, run `scripts/install-agents.ps1 <project-path>` instead.
-
-The script refuses to overwrite a different local agent file. Resolve that conflict
-explicitly instead of silently replacing project guidance.
-
-Create or document these git-bug labels:
-
-- `opsboard:sprint`, `opsboard:gate`, and `opsboard:sprint:<id>`;
-- `opsboard:role:<planner|implementer|reviewer|status-steward>`;
-- `opsboard:state:<planned|active|blocked|review|done>`.
-
-Commit the initialized contract as one focused change. Do not put credentials,
-remote tokens, generated dashboard snapshots, or local worktree paths in Git.
+  On PowerShell, run `scripts/install-agents.ps1 <project-path>` instead. The script refuses to overwrite a different local agent file — resolve conflicts explicitly.
+- Create or document git-bug labels: `opsboard:sprint`, `opsboard:gate`, `opsboard:sprint:<id>`, `opsboard:role:<planner|implementer|reviewer|status-steward>`, `opsboard:state:<planned|active|blocked|review|done>`.
+- Commit the initialized contract as one focused change. Never commit credentials, remote tokens, generated dashboard snapshots, or local worktree paths.
 
 ## Verify
 
-Show the committed contract, label taxonomy, installed agent templates, and a
-passing validator result. State the repository revision that a read-only OPSBOARD
-dashboard may project.
+Show the committed contract, label taxonomy, installed agent templates, and a passing validator result. State the repository revision a read-only OPSBOARD dashboard may project.
+
+## Reference
+
+- [`references/project-contract.md`](references/project-contract.md) — Full contract schema and examples

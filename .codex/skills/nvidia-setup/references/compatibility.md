@@ -11,18 +11,22 @@ The bundled scripts in this repository target Ubuntu hosts, not generic Debian-f
 - NVIDIA driver installation guide:
   `https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/`
 - CUDA forward compatibility:
-  `https://docs.nvidia.com/deploy/cuda-compatibility/forward-compatibility.html`
+  `https://docs.nvidia.com/deploy/cuda-compatibility/`
 - CUDA Linux installation guide:
   `https://docs.nvidia.com/cuda/cuda-installation-guide-linux/`
+- Container Toolkit install guide:
+  `https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html`
 
 ## Current branch snapshot
 
-Checked against NVIDIA documentation on **July 7, 2026**:
+Checked against NVIDIA documentation on **July 19, 2026**:
 
 - NVIDIA Unix driver archive lists Linux x86_64/aarch64 production branch `595.84`.
 - NVIDIA Unix driver archive lists Linux x86_64/aarch64 new-feature branch `610.43.03`.
 - NVIDIA data center driver index currently lists R580 data-center release notes, with older branches still present.
 - CUDA Toolkit release notes for CUDA 13.3 Update 1 list `610.43.02` as the Linux driver version associated with the toolkit.
+- CUDA 13.4 Developer Preview is available and unbundles the Linux driver (R616, >=616.00).
+- Container Toolkit latest version: `1.18.2`.
 
 Implication:
 
@@ -40,13 +44,18 @@ NVIDIA's forward compatibility guidance currently indicates:
 
 CUDA Toolkit 13.3 release notes list toolkit-corresponding Linux driver versions:
 
-- CUDA 13.3 Update 1: `610.43.02+`
-- CUDA 13.3 GA: `610.43.02+`
-- CUDA 13.2 Update 1: `595.58.03+`
-- CUDA 13.1 Update 1: `590.48.01+`
-- CUDA 13.0 Update 2: `580.95.05+`
+| CUDA Toolkit | Corresponding Linux Driver |
+|---|---|
+| CUDA 13.4 Developer Preview | N/A (unbundled; R616 >=616.00) |
+| CUDA 13.3 Update 1 | >=610.43.02 |
+| CUDA 13.3 GA | >=610.43.02 |
+| CUDA 13.2 Update 1 | >=595.58.03 |
+| CUDA 13.1 Update 1 | >=590.48.01 |
+| CUDA 13.0 Update 2 | >=580.95.05 |
 
 Do not select the CUDA package independently from the driver branch.
+
+Starting with CUDA 13.4 Developer Preview, the Linux driver is no longer bundled with the CUDA Toolkit. You must install the separately-released NVIDIA Developer Driver (R616, >=616.00) to use 13.4 features or newly enabled platforms. Existing CUDA 13.x applications continue to run on drivers >=580 under CUDA minor-version compatibility.
 
 ## Kernel module guidance
 
@@ -63,7 +72,7 @@ Practical rule for this skill:
 
 ## CUDA package guidance
 
-The CUDA installation guide recommends the `cuda-toolkit` meta package for generic installs.
+The CUDA installation guide recommends `cuda-toolkit` meta packages for generic installs.
 
 For pinned installs, distro repositories commonly expose versioned toolkit packages such as:
 
@@ -89,6 +98,8 @@ For branches older than 590, the historical package names remain relevant:
 - `nvidia-open-<branch>`
 - `nvidia-driver-<branch>`
 
+Ubuntu 22.04, 24.04, and **26.04** are all supported platforms in the latest kernel module tables.
+
 ## NVSwitch and services
 
 Use Fabric Manager only when the platform actually needs it. Common cases:
@@ -101,6 +112,22 @@ Match Fabric Manager to the selected driver branch:
 
 - For `590+` Ubuntu packages, use unversioned `nvidia-fabricmanager` with the branch pinning package already installed.
 - For older branches, use branch-suffixed packages such as `nvidia-fabricmanager-580`.
+
+## Container Toolkit guidance
+
+The NVIDIA Container Toolkit is installed from its own repository (`stable/deb`), not from the CUDA repo. The step 7 script in this skill handles GPG key and apt source setup correctly.
+
+Latest release as of July 2026: **1.18.2**.
+
+Install command (for version pinning):
+
+```bash
+sudo apt-get install -y \
+  nvidia-container-toolkit=1.18.2-1 \
+  nvidia-container-toolkit-base=1.18.2-1 \
+  libnvidia-container-tools=1.18.2-1 \
+  libnvidia-container1=1.18.2-1
+```
 
 ## Validation image guidance
 

@@ -23,7 +23,7 @@ From inside Claude Code, add the marketplace:
 Then install a plugin:
 
 ```text
-/plugin install nvidia-setup@skills-and-plugins
+/plugin install opsboard-workflow@skills-and-plugins
 ```
 
 ### Generated Agent Adapters
@@ -64,17 +64,35 @@ scripts/generate-adapters.sh
 
 Unsupported agents are intentionally not generated in this repo. Add support upstream in OASR instead of maintaining local custom adapters.
 
-## Current plugins
+## Current skills
 
 ### `nvidia-setup`
 
-Sets up NVIDIA drivers, CUDA, Fabric Manager, Docker GPU access, and post-install validation on Ubuntu GPU servers.
+Sets up NVIDIA drivers, CUDA, Fabric Manager, Docker GPU access, and post-install validation on Ubuntu GPU servers. Consumed as an OASR-generated skill adapter (not a marketplace plugin).
 
 Typical prompts:
 
 - "Install NVIDIA drivers and CUDA on this Ubuntu GPU server."
 - "Set up this box for Docker GPU workloads."
 - "Detect the GPU model and pick a current driver branch."
+
+### `nabapro`
+
+Generates and edits images with Google's Nano Banana Pro / Gemini image-generation API.
+
+Typical prompts:
+
+- "Use Nabapro to generate a product image from this prompt."
+- "Edit this reference image while preserving the layout."
+- "Create a poster with exact rendered text."
+
+Real API calls require `GEMINI_API_KEY` in the environment. Dry runs do not require a key.
+
+### `opsboard-*`
+
+Git-native OPSBOARD workflow skills (also packaged as the `opsboard-workflow` plugin). See below.
+
+## Current plugins
 
 ### `opsboard-workflow`
 
@@ -89,18 +107,6 @@ Typical prompts:
 - "Initialize this repository for the Git-native OPSBOARD workflow."
 - "Turn this brief into an approval-gated OPSBOARD sprint proposal."
 - "Start this approved OPSBOARD issue in an isolated external worktree."
-
-### `banano`
-
-Generates and edits images with Google's Nano Banana Pro / Gemini image-generation API.
-
-Typical prompts:
-
-- "Use Banano to generate a product image from this prompt."
-- "Edit this reference image while preserving the layout."
-- "Create a poster with exact rendered text."
-
-Real API calls require `GEMINI_API_KEY` in the environment. Dry runs do not require a key.
 
 ## OPSBOARD workflows
 
@@ -129,11 +135,11 @@ Codex loads custom agents from the target project.
 .agents/plugins/marketplace.json    Codex marketplace manifest
 .claude-plugin/marketplace.json     Claude Code marketplace manifest
 skills/
-  banano/
+  nabapro/
     SKILL.md
     agents/openai.yaml
     references/gemini-image-api.md
-    scripts/banano.py
+    scripts/nabapro.py
   nvidia-setup/
     SKILL.md
     agents/openai.yaml
@@ -148,17 +154,18 @@ skills/
 agents/
   opsboard-*.toml                 Project-scoped Codex custom-agent templates
 plugins/
-  nvidia-setup/
+  opsboard-workflow/
     .codex-plugin/plugin.json
     .claude-plugin/plugin.json
-    skills/nvidia-setup/            Compatibility copy synced from skills/nvidia-setup
+    skills/opsboard-*/            Compatibility copies synced from skills/
+    agents/                       Compatibility copies of agents/
 scripts/
   generate-adapters.sh
   sync-plugin-skills.sh
   validate-skills.sh
 ```
 
-## Add a new plugin
+## Add a new skill
 
 1. Create `skills/<skill-name>/SKILL.md`.
 2. Add bundled scripts, references, and agent metadata under `skills/<skill-name>/`.

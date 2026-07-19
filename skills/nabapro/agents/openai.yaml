@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nabapro"
+  short_description: "Generate and edit Nano Banana Pro images"
+  default_prompt: "Use $nabapro to generate a detailed Nano Banana Pro image from this prompt."

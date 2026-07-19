@@ -1,5 +1,5 @@
 ---
-description: "Coordinate Git-native OPSBOARD worktrees and human decision gates. Use when agents are blocked on human input, when an operator must list waiting worktrees, when reviewing open decision issues, or when resuming work after a git-bug approval."
+description: "Use this skill to coordinate Git-native OPSBOARD worktrees and human decision gates. Trigger when agents are blocked on human input, when an operator must list waiting worktrees, when reviewing open decision issues, or when resuming work after a git-bug approval."
 auto_execution_mode: 1
 ---
 

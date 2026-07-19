@@ -12,8 +12,6 @@ sync_skill() {
   cp -R "$repo_root/skills/$skill_name" "$repo_root/plugins/$plugin_name/skills/$skill_name"
 }
 
-sync_skill nvidia-setup nvidia-setup
-
 for skill_name in opsboard-acceptance-verify opsboard-cd-promote \
   opsboard-dashboard-register opsboard-demo-capture opsboard-project-init \
   opsboard-orchestrate opsboard-sprint-plan opsboard-status-update \

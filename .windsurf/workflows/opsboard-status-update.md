@@ -1,5 +1,5 @@
 ---
-description: "Record durable, non-secret OPSBOARD project status in git-bug and Git. Use when an agent starts, hands off, becomes blocked, requests review, completes work, or needs to make dashboard status accurate."
+description: "Use this skill to record durable, non-secret OPSBOARD project status in git-bug and Git. Trigger when an agent starts, hands off, becomes blocked, requests review, completes work, or needs to make dashboard status accurate."
 auto_execution_mode: 1
 ---
 

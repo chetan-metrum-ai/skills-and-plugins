@@ -48,3 +48,18 @@ while IFS= read -r -d '' generated_skill; do
     "s#source: \\Q$repo_root\\E/skills/$skill_name#source: skills/$skill_name#g; s#synced: '[^']+'#synced: 'generated'#g" \
     "$generated_skill"
 done < <(find "$repo_root"/.codex "$repo_root"/.claude "$repo_root"/.cursor "$repo_root"/.windsurf "$repo_root"/.github -path '*/skills/*/SKILL.md' -type f -print0)
+
+# Remove generated skill directories that no longer have a canonical source.
+# OASR only cleans up stale top-level adapter files, not the */skills/<name>/ copies.
+for adapter_root in "$repo_root"/.codex "$repo_root"/.claude "$repo_root"/.cursor "$repo_root"/.windsurf "$repo_root"/.github; do
+  skills_dir="$adapter_root/skills"
+  [ -d "$skills_dir" ] || continue
+  for generated_skill_dir in "$skills_dir"/*; do
+    [ -d "$generated_skill_dir" ] || continue
+    skill_name="$(basename "$generated_skill_dir")"
+    if [ ! -d "$repo_root/skills/$skill_name" ]; then
+      echo "Removing stale generated skill: $generated_skill_dir"
+      rm -rf "$generated_skill_dir"
+    fi
+  done
+done

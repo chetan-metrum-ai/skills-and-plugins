@@ -1,6 +1,6 @@
 # opsboard-worktree-task
 
-Start one approved OPSBOARD git-bug issue in an isolated external Git worktree. Use when assigning an implementer or reviewer, creating a task branch, recording a handoff, or checking that a gate permits work to begin.
+Use this skill to start one approved OPSBOARD git-bug issue in an isolated external Git worktree. Trigger when assigning an implementer or reviewer, creating a task branch, recording a handoff, or checking that a gate permits work to begin.
 
 This command delegates to the agent skill at `../skills/opsboard-worktree-task/`.
 
