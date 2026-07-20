@@ -1,4 +1,0 @@
-interface:
-  display_name: "OPSBOARD Acceptance Verify"
-  short_description: "Verify a Git-native OPSBOARD delivery in a clean checkout."
-  default_prompt: "Verify this OPSBOARD sprint from a fresh clone and capture factual acceptance evidence."

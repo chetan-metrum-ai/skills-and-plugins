@@ -1,0 +1,4 @@
+interface:
+  display_name: "OPSBOARD Issue Orchestrator"
+  short_description: "Coordinate GitHub issues with worktrees"
+  default_prompt: "Use $opsboard-issue-orchestrate to plan and implement GitHub issues #123 and #456."

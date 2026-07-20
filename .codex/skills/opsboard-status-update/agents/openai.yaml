@@ -1,4 +1,0 @@
-interface:
-  display_name: "OPSBOARD Status Update"
-  short_description: "Record durable Git-backed delivery status."
-  default_prompt: "Record this OPSBOARD work status in git-bug."

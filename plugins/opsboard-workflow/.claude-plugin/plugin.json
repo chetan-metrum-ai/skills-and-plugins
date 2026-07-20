@@ -1,6 +1,6 @@
 {
   "name": "opsboard-workflow",
-  "description": "Git-native OPSBOARD delivery with human-approval packages, gated sprints, worktrees, and durable evidence.",
+  "description": "Dependency-aware GitHub issue delivery with subagent worktrees and durable OPSBOARD status.",
   "version": "0.1.0",
   "author": {
     "name": "chetan-metrum-ai",

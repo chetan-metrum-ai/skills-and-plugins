@@ -1,4 +1,0 @@
-interface:
-  display_name: "OPSBOARD Demo Capture"
-  short_description: "Capture test evidence and demo references."
-  default_prompt: "Capture OPSBOARD demo evidence for this completed sprint work."

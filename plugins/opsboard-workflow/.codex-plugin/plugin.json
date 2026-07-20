@@ -1,7 +1,7 @@
 {
   "name": "opsboard-workflow",
   "version": "0.1.0",
-  "description": "Git-native OPSBOARD delivery with human-approval packages, gated sprints, worktrees, and durable evidence.",
+  "description": "Dependency-aware GitHub issue delivery with subagent worktrees and durable OPSBOARD status.",
   "author": {
     "name": "chetan-metrum-ai",
     "url": "https://github.com/chetan-metrum-ai"
@@ -18,8 +18,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "OPSBOARD Workflow",
-    "shortDescription": "Human-approval packages, gated sprints, worktrees, and durable OPSBOARD evidence.",
-    "longDescription": "Initialize the Git and git-bug contract, auto-build human-approval packages (Function Specs, flow schematics, mocks, and mock interaction videos), plan approval-gated sprints, work in isolated worktrees, record factual status mapped to verification matrices, capture review evidence, and register a read-only OPSBOARD dashboard source.",
+    "shortDescription": "Coordinate GitHub issues with dependency-aware subagent worktrees and durable status.",
+    "longDescription": "Analyze GitHub issue dependencies, dispatch independent ready issues to isolated git-worktree subagents, request human decisions in the relevant issue when needed, and reconcile a repository-owned .opsboard ledger across invocations.",
     "developerName": "chetan-metrum-ai",
     "category": "Productivity",
     "capabilities": [
@@ -27,9 +27,8 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Initialize this repository for the Git-native OPSBOARD workflow.",
-      "Turn this brief into an approval-gated OPSBOARD sprint proposal with a full human-approval package.",
-      "Prepare an approved OPSBOARD issue in an isolated external worktree."
+      "Use OPSBOARD to plan and implement GitHub issues #123 and #456.",
+      "Resume the OPSBOARD status for GitHub issue #123 and check for human replies."
     ]
   }
 }

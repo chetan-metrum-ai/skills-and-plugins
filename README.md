@@ -88,47 +88,41 @@ Typical prompts:
 
 Real API calls require `GEMINI_API_KEY` in the environment. Dry runs do not require a key.
 
-### `opsboard-*`
+### `opsboard-issue-orchestrate`
 
-Git-native OPSBOARD workflow skills (also packaged as the `opsboard-workflow` plugin). See below.
+Coordinates GitHub issues using dependency-aware sequencing, isolated worktree subagents, human-decision comments, and a durable `.opsboard/issue-orchestrator/` ledger.
 
 ## Current plugins
 
 ### `opsboard-workflow`
 
-Sets up and operates the Git-native OPSBOARD workflow: a repository-owned
-`.opsboard/` contract, git-bug backlog and gates, human-approval packages,
-isolated worktrees, durable review evidence, and read-only dashboard
-registration. It includes the nine OPSBOARD skills plus project-scoped agent
-templates (planner, implementer, reviewer, status-steward, orchestrator,
-acceptance-tester, deployment-engineer, deployment-approver).
+Coordinates GitHub issue delivery in a repository-owned `.opsboard/` ledger.
+It determines evidence-backed issue dependencies, uses isolated git worktrees
+for independent implementation subagents, posts focused comments when a human
+decision is needed, and reconciles comments, worktrees, diffs, and status on
+each invocation.
 
 Typical prompts:
 
-- "Initialize this repository for the Git-native OPSBOARD workflow."
-- "Turn this brief into an approval-gated OPSBOARD sprint proposal."
-- "Start this approved OPSBOARD issue in an isolated external worktree."
+- "Use OPSBOARD to plan and implement GitHub issues #123 and #456."
+- "Resume OPSBOARD for #123 and check whether the human answered the blocker."
 
-## OPSBOARD workflows
+## OPSBOARD issue workflow
 
-The `opsboard-*` skills provide a Git-native workflow for product repositories:
-initialize a portable `.opsboard/` and git-bug contract, auto-build human-approval
-packages (Function Specs, user/admin flow schematics, mock screens, and mock
-interaction videos for UI work), plan approval-gated sprints, assign isolated
-worktrees, record durable status/demo evidence mapped to verification matrices,
-and register a read-only dashboard source.
+The `opsboard-issue-orchestrate` skill provides a GitHub-issue workflow for
+product repositories. It builds a dependency graph from issue evidence, starts
+only ready work, and dispatches each independent issue to an isolated external
+git worktree. The primary orchestrator is the sole writer of a durable
+`.opsboard/issue-orchestrator/` ledger; subagents provide structured handoffs
+that it verifies against the worktree before recording progress.
 
-Humans approve or steer; agents assemble the decision artifacts. Durable approval
-is a human comment plus a closed git-bug gate or decision issue — never chat alone.
+Humans steer unresolved requirements in the affected GitHub issue. OPSBOARD
+checks for new human comments at every resume and after agent rounds, and only
+posts a new comment when the evidence, question, or state changes.
 
-They are skills, not a hosted execution service. Git and git-bug remain the
-durable source of truth; credentials and generated status projections are never
-committed.
-
-Canonical OPSBOARD custom-agent templates live under `agents/`. The project-init
-skill installs all `agents/opsboard-*.toml` templates into an adopted
-repository's `.codex/agents/` directory. OASR generates skill adapters; the TOML
-files stay canonical because Codex loads custom agents from the target project.
+It is a skill, not a hosted execution service. GitHub and Git remain the source
+of issue and code truth. The `.opsboard` ledger contains no credentials and is
+only committed when the user asks to persist that coordination state in Git.
 
 ## Repo layout
 
@@ -151,23 +145,15 @@ skills/
     agents/openai.yaml
     references/compatibility.md
     steps/*.sh
-  opsboard-project-init/
-  opsboard-sprint-plan/
-  opsboard-worktree-task/
-  opsboard-status-update/
-  opsboard-demo-capture/
-  opsboard-dashboard-register/
-  opsboard-orchestrate/
-  opsboard-acceptance-verify/
-  opsboard-cd-promote/
-agents/
-  opsboard-*.toml                 Project-scoped Codex custom-agent templates
+  opsboard-issue-orchestrate/
+    SKILL.md
+    agents/openai.yaml
+    references/state-contract.md
 plugins/
   opsboard-workflow/
     .codex-plugin/plugin.json
     .claude-plugin/plugin.json
-    skills/opsboard-*/            Compatibility copies synced from skills/
-    agents/                       Compatibility copies of agents/
+    skills/opsboard-issue-orchestrate/  Compatibility copy synced from skills/
 scripts/
   generate-adapters.sh
   sync-plugin-skills.sh

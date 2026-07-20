@@ -1,4 +1,0 @@
-interface:
-  display_name: "OPSBOARD Project Init"
-  short_description: "Initialize a Git-native OPSBOARD project."
-  default_prompt: "Initialize this repository for OPSBOARD Git and git-bug workflows."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "OPSBOARD Sprint Plan"
-  short_description: "Build a human-approval package and plan-lock gated sprint."
-  default_prompt: "Turn this brief into an approval-gated OPSBOARD sprint proposal with a full human-approval package (Function Specs, flows, mocks, and UI mock video) before plan-lock."

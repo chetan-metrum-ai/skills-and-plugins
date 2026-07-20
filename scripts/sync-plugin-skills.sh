@@ -12,12 +12,9 @@ sync_skill() {
   cp -R "$repo_root/skills/$skill_name" "$repo_root/plugins/$plugin_name/skills/$skill_name"
 }
 
-for skill_name in opsboard-acceptance-verify opsboard-cd-promote \
-  opsboard-dashboard-register opsboard-demo-capture opsboard-project-init \
-  opsboard-orchestrate opsboard-sprint-plan opsboard-status-update \
-  opsboard-worktree-task; do
+for skill_name in opsboard-issue-orchestrate; do
   sync_skill opsboard-workflow "$skill_name"
 done
 
-rm -rf "$repo_root/plugins/opsboard-workflow/agents"
-cp -R "$repo_root/agents" "$repo_root/plugins/opsboard-workflow/agents"
+# OPSBOARD now uses the host's subagent orchestration and per-issue worktrees.
+# It intentionally has no project-scoped custom-agent templates to copy.
